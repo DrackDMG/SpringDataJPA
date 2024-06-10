@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 public class IntroSpringDataJpaApplication {
@@ -18,37 +17,51 @@ public class IntroSpringDataJpaApplication {
 	}
 
 	@Bean
-	public CommandLineRunner testCusomerRepositoryCommand(CustomerRepository customerRepository) {
+	public CommandLineRunner testQueryMethodCommand(CustomerRepository customerRepository) {
 		return args -> {
 			Customer customer = new Customer();
 			customer.setName("Juan");
 			customer.setPassword("1234");
+			customer.setUsername("juanito");
 
 			Customer ramon = new Customer();
 			ramon.setName("Ramon");
 			ramon.setPassword("5678");
+			ramon.setUsername("mochemmon");
 
-			List<Customer> customers = List.of(customer, ramon);
+			Customer pepe = new Customer();
+			pepe.setName("Pepe");
+			pepe.setPassword("abcd");
+			pepe.setUsername("pepito");
 
-			System.out.println("\nGuardando clientes:");
+			Customer pepe2 = new Customer();
+			pepe2.setName("Pepo");
+			pepe2.setPassword("abcd");
+			pepe2.setUsername("pepon");
+
+
+			System.out.println("/n Guardando clientes");
+			List<Customer> customers = List.of(customer, ramon, pepe, pepe2);
+
 			customerRepository.saveAll(customers);
 
-			System.out.println("\nCliente con Id 1:");
-			customerRepository.findById(1L).ifPresent(System.out::println);
+//pruebas 1
+//			System.out.println("/n Buscando por nombre de usuario");
+//			System.out.println(customerRepository.findByUsername("pepon"));
+//			System.out.println("/n Buscando por nombre de usuario");
+//			System.out.println(customerRepository.searchByUsername("juanito"));
 
-			System.out.println("\nBorrando cliente con Id 1:");
-			customerRepository.deleteById(1L);
+			//pruebas 2
+			System.out.println("/n Buscando por nombre con la letra o");
+			customerRepository.findByNameContaining("o").forEach(System.out::println);
+			System.out.println("/n Buscando por nombre que empieza con P");
+			System.out.println(customerRepository.queryByNameStartingWith("P"));
+			System.out.println("/n Buscando por nombre que termina con o");
+			customerRepository.readByNameEndingWith("o").forEach(System.out::println);
 
-			System.out.println("\nActualizando cliente con Id 2:");
-			Optional<Customer> customer2 = customerRepository.findById(4L);
-			customer2.ifPresent(c -> {
-				c.setName("Monchemon");
-				c.setPassword("8765");
-				customerRepository.save(c);
-			});
+			System.out.println("/n Buscando por nombre que contenga e y id mayor a 1");
+			customerRepository.findByNameContainingAndIdGreaterThanOrderByIdDesc("e", 1L).forEach(System.out::println);
 
-			System.out.println("\nClientes guardados:");
-			customerRepository.findAll().forEach(System.out::println);
 		};
 	}
 
