@@ -62,6 +62,12 @@ public class IntroSpringDataJpaApplication {
 			System.out.println("/n Buscando por nombre que contenga e y id mayor a 1");
 			customerRepository.findByNameContainingAndIdGreaterThanOrderByIdDesc("e", 1L).forEach(System.out::println);
 
+			System.out.println("/n Buscando por nombre que contenga e y id mayor a 1 usando jpql y la anotacion @Query");
+			customerRepository.findAllByNameAndIdGreaterThan("e", 1L).forEach(System.out::println);
+
+			System.out.println("/n Buscando por nombre que contenga e y id mayor a 1 usando sql nativo y la anotacion @Query");
+			customerRepository.findAllByNameAndIdGreaterThanWhitSQL("e", 1L).forEach(System.out::println);
+
 		};
 	}
 
