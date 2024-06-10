@@ -1,6 +1,8 @@
 package com.drack.IntroSpringDataJpa;
 
+import com.drack.IntroSpringDataJpa.persistence.entity.Address;
 import com.drack.IntroSpringDataJpa.persistence.entity.Customer;
+import com.drack.IntroSpringDataJpa.persistence.repository.AddressRepository;
 import com.drack.IntroSpringDataJpa.persistence.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,58 +19,52 @@ public class IntroSpringDataJpaApplication {
 	}
 
 	@Bean
-	public CommandLineRunner testQueryMethodCommand(CustomerRepository customerRepository) {
+	public CommandLineRunner testOneToOneRelationShipCommand(CustomerRepository customerRepository) {
 		return args -> {
 			Customer customer = new Customer();
 			customer.setName("Juan");
 			customer.setPassword("1234");
 			customer.setUsername("juanito");
+			Address juanAddress = new Address();
+			juanAddress.setCountry("Mexico");
+			juanAddress.setAddress("Calle 123");
+			customer.setAddress(juanAddress);
 
 			Customer ramon = new Customer();
 			ramon.setName("Ramon");
 			ramon.setPassword("5678");
 			ramon.setUsername("mochemmon");
+			Address ramonAddress = new Address();
+			ramonAddress.setCountry("Mexico");
+			ramonAddress.setAddress("Calle 456");
+			ramon.setAddress(ramonAddress);
 
 			Customer pepe = new Customer();
 			pepe.setName("Pepe");
 			pepe.setPassword("abcd");
 			pepe.setUsername("pepito");
-
-			Customer pepe2 = new Customer();
-			pepe2.setName("Pepo");
-			pepe2.setPassword("abcd");
-			pepe2.setUsername("pepon");
+			Address pepeAddress = new Address();
+			pepeAddress.setCountry("Mexico");
+			pepeAddress.setAddress("Calle 789");
+			pepe.setAddress(pepeAddress);
 
 
 			System.out.println("/n Guardando clientes");
-			List<Customer> customers = List.of(customer, ramon, pepe, pepe2);
+			List<Customer> customers = List.of(customer, ramon, pepe );
 
-			customerRepository.saveAll(customers);
-
-//pruebas 1
-//			System.out.println("/n Buscando por nombre de usuario");
-//			System.out.println(customerRepository.findByUsername("pepon"));
-//			System.out.println("/n Buscando por nombre de usuario");
-//			System.out.println(customerRepository.searchByUsername("juanito"));
-
-			//pruebas 2
-			System.out.println("/n Buscando por nombre con la letra o");
-			customerRepository.findByNameContaining("o").forEach(System.out::println);
-			System.out.println("/n Buscando por nombre que empieza con P");
-			System.out.println(customerRepository.queryByNameStartingWith("P"));
-			System.out.println("/n Buscando por nombre que termina con o");
-			customerRepository.readByNameEndingWith("o").forEach(System.out::println);
-
-			System.out.println("/n Buscando por nombre que contenga e y id mayor a 1");
-			customerRepository.findByNameContainingAndIdGreaterThanOrderByIdDesc("e", 1L).forEach(System.out::println);
-
-			System.out.println("/n Buscando por nombre que contenga e y id mayor a 1 usando jpql y la anotacion @Query");
-			customerRepository.findAllByNameAndIdGreaterThan("e", 1L).forEach(System.out::println);
-
-			System.out.println("/n Buscando por nombre que contenga e y id mayor a 1 usando sql nativo y la anotacion @Query");
-			customerRepository.findAllByNameAndIdGreaterThanWhitSQL("e", 1L).forEach(System.out::println);
-
+			//customerRepository.saveAll(customers);
 		};
+	}
+
+	@Bean
+	public CommandLineRunner testAddressCrudRepositoryCommand(AddressRepository  addressRepository) {
+		return args -> {
+			addressRepository.findAll()
+					.forEach(eachAddress -> {
+						System.out.println(eachAddress.getAddress() + "-" + eachAddress.getCustomer().getId());
+					});
+		};
+
 	}
 
 }

@@ -16,9 +16,12 @@ public class Customer {
     @Column(name = "contrasena")
     private String password;
 
-
     @Column(unique = true)
     private String username;
+
+    @OneToOne(targetEntity = Address.class, cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "id_direccion")
+    private Address address;
 
     @Override
     public String toString() {
@@ -62,4 +65,11 @@ public class Customer {
         this.password = password;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 }
