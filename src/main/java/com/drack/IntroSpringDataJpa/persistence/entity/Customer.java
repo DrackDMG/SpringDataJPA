@@ -2,6 +2,8 @@ package com.drack.IntroSpringDataJpa.persistence.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "clientes")
 public class Customer {
@@ -19,9 +21,9 @@ public class Customer {
     @Column(unique = true)
     private String username;
 
-    @OneToOne(targetEntity = Address.class, cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "id_direccion")
-    private Address address;
+    @OneToMany(targetEntity = Address.class, cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "id_cliente")
+    private List<Address> address;
 
     @Override
     public String toString() {
@@ -65,11 +67,11 @@ public class Customer {
         this.password = password;
     }
 
-    public Address getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 }

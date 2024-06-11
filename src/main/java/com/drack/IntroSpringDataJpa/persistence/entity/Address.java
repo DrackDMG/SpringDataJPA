@@ -9,8 +9,16 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "address")
-    private Customer customer;
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    @Column(name = "id_cliente")
+  private Long customerId;
 
     @Column(name = "pais")
     private String country;
@@ -41,13 +49,7 @@ public class Address {
         this.country = country;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
 
     @Override
     public String toString() {

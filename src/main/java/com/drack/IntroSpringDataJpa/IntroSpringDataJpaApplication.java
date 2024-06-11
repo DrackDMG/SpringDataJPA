@@ -25,46 +25,22 @@ public class IntroSpringDataJpaApplication {
 			customer.setName("Juan");
 			customer.setPassword("1234");
 			customer.setUsername("juanito");
-			Address juanAddress = new Address();
-			juanAddress.setCountry("Mexico");
-			juanAddress.setAddress("Calle 123");
-			customer.setAddress(juanAddress);
-
-			Customer ramon = new Customer();
-			ramon.setName("Ramon");
-			ramon.setPassword("5678");
-			ramon.setUsername("mochemmon");
-			Address ramonAddress = new Address();
-			ramonAddress.setCountry("Mexico");
-			ramonAddress.setAddress("Calle 456");
-			ramon.setAddress(ramonAddress);
-
-			Customer pepe = new Customer();
-			pepe.setName("Pepe");
-			pepe.setPassword("abcd");
-			pepe.setUsername("pepito");
-			Address pepeAddress = new Address();
-			pepeAddress.setCountry("Mexico");
-			pepeAddress.setAddress("Calle 789");
-			pepe.setAddress(pepeAddress);
+			Address juanAddressOne = new Address();
+			juanAddressOne.setCountry("Mexico");
+			juanAddressOne.setAddress("Calle 123");
+			Address juanAddressTwo = new Address();
+			juanAddressTwo.setCountry("Mexico");
+			juanAddressTwo.setAddress("Calle 456");
+			customer.setAddress(List.of(juanAddressOne, juanAddressTwo));
 
 
-			System.out.println("/n Guardando clientes");
-			List<Customer> customers = List.of(customer, ramon, pepe );
+			System.out.println("/n Guardando cliente");
+			customerRepository.save(customer);
 
 			//customerRepository.saveAll(customers);
 		};
 	}
 
-	@Bean
-	public CommandLineRunner testAddressCrudRepositoryCommand(AddressRepository  addressRepository) {
-		return args -> {
-			addressRepository.findAll()
-					.forEach(eachAddress -> {
-						System.out.println(eachAddress.getAddress() + "-" + eachAddress.getCustomer().getId());
-					});
-		};
 
-	}
 
 }
